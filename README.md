@@ -21,6 +21,6 @@ After that you can download all reviews from that city with command:
 
 python3 "ottieni recensioni.py"
 
-Remember that this last operation is very slow and can take long time.
+Remember that this last operation is very slow and can take long time, it depends on number of reviews.
 
 At the end it will create a file called recensioni.txt where are saved all reviews of the city.
