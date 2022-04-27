@@ -1,7 +1,14 @@
 # TripAdvisor-Analyser
 Create an excel file with Restaurant datas from TripAdvisor. Name, link, stars and reviews. Download all review of a city.
+Requirements:
 
-Command:
+Python 3
+
+Install requirements:
+
+pip3 install -r requirements.txt
+
+Commands:
 
 python3 "Analisi TripAdvisor.py"  
 
