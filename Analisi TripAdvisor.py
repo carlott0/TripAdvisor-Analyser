@@ -27,49 +27,37 @@ recensioni=[]
 
 print("Inserire un link di una città su tripadvisor per ottenere i suoi ristoranti.")
 print("Es: https://www.tripadvisor.it/Restaurants-g187807-Rimini_Province_of_Rimini_Emilia_Romagna-Vacations.html")
-input_link=input()
+#input_link=input()
+input_link="https://www.tripadvisor.it/Restaurants-g194878-Riccione_Province_of_Rimini_Emilia_Romagna.html"
 geocode=input_link.split("-g")[1].split("-")[0]
 
 while(giro):
     
     offsett=i*30
     i+=1
-    
+    items=[]
     
     link="https://www.tripadvisor.it/RestaurantSearch?Action=PAGE&ajax=1&availSearchEnabled=true&sortOrder=popularity&geo="+geocode+"&itags=10591&eaterydate=2022_04_11&date=2022-04-12&time=20:00:00&people=2&o=a"+str(offsett)
     r=session.get(link)
-
+    
     soup= BeautifulSoup(r.content, "html.parser")
-    div=soup.find("div", )
-    
-    div=soup.find("div", {'class':'OhCyu'})
-    value=str(div).split('_blank">')[1].split("<")[0]
+    try:
+        if soup.find("span",{"class","nav next disabled"})!=None:
+            print("esco")
+            break
+    except:
+        continue
+    items=div.find_all("div",{"class", "YHnoF Gi o"})
     print("Analisi primi",offsett, "ristoranti")
-    if fine==1 and value=="1":
-        giro=False
-        break
-    if fine==0 and value=="1":
-        fine=1
-    for div in soup.find_all("div", {'class':'OhCyu'}): 
-        remove_digits = div.text.maketrans('', '', digits)
-        remove_point = div.text.maketrans('','','.')
-        s = div.text.translate(remove_digits).translate(remove_point)
-        
-        nomi.append(s)
-        links.append("https://www.tripadvisor.it"+str(div).split("href=\"")[1].split(" target=")[0])
-    for div in soup.find_all("div", {'class':'bhDlF bPJHV'}): 
-        try:
-            stelle.append(str(div).split("Punteggio ")[1].split(" su")[0])
-        except Exception as e:
-            pass
-    for div in soup.find_all("span", {'class':'NoCoR'}): 
-        s= str(div.text).replace('recensioni','')
-        recensioni.append(s)
-    
-
+    for it in items:
+        #stelle:
+        stelle.append(str(it.find("svg", {"class","UctUV d H0"})['aria-label']).split("Punteggio ")[1].split(" su")[0])
+        #nomi
+        nomi.append(str(it.find("a",{"class","Lwqic Cj b"}).text))
+        #links
+        links.append("https://www.tripadvisor.it"+str(it.find("a",{"class","Lwqic Cj b"})['href']))
+        recensioni.append(it.find("span", {'class':'IiChw'}).text.replace("recensioni","")) 
 print("Totale ristoranti: ",str(len(links)))
-
-
 
 diz=[]
 for n in zip(nomi,links,stelle, recensioni):
